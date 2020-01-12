@@ -193,6 +193,12 @@ class InvoiceCrudController extends CrudController
             "type" => "number",
             "suffix" => ".00",
         ]);
+        $this->crud->addField([
+            "name" => "price_flight",
+            "label" => "Flight Price",
+            "type" => "number",
+            "suffix" => ".00",
+        ]);
 
         $this->crud->addField([
             "name" => "price_total",

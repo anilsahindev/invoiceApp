@@ -4,14 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Deneme</title>
+    <title>customerinvoice</title>
+    <style>
+        .container {
+            box-shadow: 1px 1px 20px 1px #a9a9a9;
+            background: #fff;
+            padding: 20px;
+        }
+
+        body {
+            background: #e0e0e000;
+        }
+
+        .download-button {
+            width: 150px;
+            height: 150px;
+            background: none;
+            border-radius: 50%;
+            position: fixed;
+            background: #fff;
+            font-size: 24px;
+            color: #ff6767;
+            outline: none;
+            top: 50%;
+            box-shadow: 1px 1px 20px 1px #989898;
+        }
+
+        @media print {
+            @page { margin: 0; }
+            .download-button {
+                display: none;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+
+    </style>
 </head>
 <body>
 <div id="section" class="section" style="width:800px;margin:0 auto;font-family: sans-serif;">
     <div class="container">
         <div class="row">
             <div class="pdf col-md-12" style="">
-                <table  style="width:100%; border:1px solid #f2f2f2;text-transform: capitalize;">
+                <table style="width:100%; text-transform: capitalize;">
                     <tr>
                         <td style="width:80%;padding:0px 10px;">
 
@@ -24,7 +60,7 @@
                     </tr>
                     <tr>
                         <td style="width:80%;padding:0px 10px; ">
-                            her
+                            Herr
                         </td>
                         <td style="width:20%">
 
@@ -32,7 +68,7 @@
                     </tr>
                     <tr>
                         <td style="width:80%;padding:0px 10px; ">
-                            Melih Ekin
+                            {{$entry->first_name}}  {{$entry->last_name}}
                         </td>
                         <td style="width:20%; padding:0px 10px;">
 
@@ -40,25 +76,20 @@
                     </tr>
                     <tr>
                         <td style="width:80%;padding:0px 10px; ">
-                            Hauptstr. 8 A
-                            <br>
-
-                            86399 Bobingen
-                            <br>
-                            Deutschland
+                            {{$entry->address}}
                         </td>
                         <td style="width:20%;  vertical-align: text-top;">
-                            Berater: Fadil Yildirim
+                            Berater: Anıl ŞAHİN
                             <br>
-                            <span style="font-weight:bold;">Kundennummer: XXXXDFF</span>
+                            <span style="font-weight:bold;">Kundennummer: {{$entry->id}}</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="width:80%;padding:0px 10px; ">
 
                         </td>
-                        <td style="width:20%; padding:0px 10px; ">
-                            Bobingen, den 05.01.2020
+                        <td style="width:20%;">
+                            Bobingen, den 12.01.2020
                         </td>
                     </tr>
                     <tr>
@@ -68,7 +99,7 @@
                     </tr>
                     <tr>
                         <td style="width:100%; font-weight: bold;padding:10px;" colspan="2">
-                            <span style="text-decoration: underline;">Bestätigung / Rechnung Nr.</span> : &nbsp; 55974234
+                            <span style="text-decoration: underline;">Bestätigung / Rechnung Nr.</span> : &nbsp; {{$entry->invoice_number}}
                         </td>
                     </tr>
                     <tr>
@@ -84,28 +115,19 @@
                     <tr style="margin-bottom:50px">
                         <td style="width:100%;padding:0px 10px;">
                             <table style="width:100%;">
-                                <tr>
-                                    <td style="width:30%">
-                                        ela
-                                    </td>
-                                    <td style="width:30%">
-                                        ela
-                                    </td>
-                                    <td style="width:40%">
-                                        ela
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:30%">
-                                        ela
-                                    </td>
-                                    <td style="width:30%">
-                                        ela
-                                    </td>
-                                    <td style="width:40%">
-                                        ela
-                                    </td>
-                                </tr>
+                                @foreach($entry->activity_participants as $activy_user)
+                                    <tr>
+                                        <td style="width:30%">
+                                            {{$activy_user['gender']}}
+                                        </td>
+                                        <td style="width:30%">
+                                            {{$activy_user['first_name']}}
+                                        </td>
+                                        <td style="width:40%">
+                                            {{$activy_user['last_name']}}
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </table>
                         </td>
                     </tr>
@@ -128,26 +150,28 @@
                     </tr>
                     <tr>
                         <td style="padding:0px 10px;" colspan="2">
-                            Hotel: Sueno de luxe Belek
+                            {{$entry->activity_place}}
                         </td>
 
                     </tr>
                     <tr>
                         <td style="padding:0px 10px;" colspan="2">
-                            <span style="text-decoration:underline;"> Check In:</span> 08.09.2020
-                            <span style="text-decoration:underline;">Check Out:</span> 15.09.2020
+                            <span style="text-decoration:underline;"> Check In:</span> {{$entry->activity_check_in}}
+                            <span style="text-decoration:underline;">Check Out:</span> {{$entry->activity_check_out}}
 
                         </td>
                     </tr>
                     <tr>
                         <td style="width:80%;padding:0px 10px;">
 
-                            1x Doppelzimmer Landseite
+                            @foreach($entry->activity_rooms as $activy_room)
+                                {{$activy_room['amount']}} {{$activy_room['type']}}
+                            @endforeach
                             <br>
                             Ultra All Inklusive
                         </td>
                         <td style="width:20%;padding:0px 10px;vertical-align: bottom;">
-                            999,
+                            {{$entry->price_activity}},00 EUR
                         </td>
                     </tr>
                     <tr>
@@ -168,7 +192,6 @@
                     <tr>
                         <td style="width:80%;padding:0px 10px;">
                             <table style="width:100%;">
-
                                 <tr>
                                     <td style="width:10%">
                                         Tarih
@@ -183,94 +206,54 @@
                                         Kalkis Inis
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="width:10%">
-                                        08.09.2020
-                                    </td>
-                                    <td style="width:20%">
-                                        XQ2879
-                                    </td>
-                                    <td style="width:30%">
-                                        München – Antalya
-                                    </td>
-                                    <td style="width:20%">
-                                        <table style="width:100%;">
-                                            <tr>
-                                                <td style="width:50%;">
-                                                    Abflug:
-                                                </td>
-                                                <td style="width:50%;">
-                                                    06:00
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%">
+                                @foreach($entry->activity_flight_tickets as $activy_flight_info)
+                                    <tr>
+                                        <td style="width:10%">
+                                            {{$activy_flight_info['departure_date']}}
+                                        </td>
+                                        <td style="width:20%">
+                                            {{$activy_flight_info['pnr']}}
+                                        </td>
+                                        <td style="width:30%">
+                                            {{$activy_flight_info['origin']}}-{{$activy_flight_info['destination']}}
+                                        </td>
+                                        <td style="width:20%">
+                                            <table style="width:100%;">
+                                                <tr>
+                                                    <td style="width:50%;">
+                                                        Abflug:
+                                                    </td>
+                                                    <td style="width:50%;">
+                                                        {{$activy_flight_info['arrival_time']}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:10%">
 
-                                    </td>
-                                    <td style="width:20%">
+                                        </td>
+                                        <td style="width:20%">
 
-                                    </td>
-                                    <td style="width:30%">
+                                        </td>
+                                        <td style="width:30%">
 
-                                    </td>
-                                    <td style="width:20%">
-                                        <table style="width:100%;">
-                                            <tr>
-                                                <td style="width:50%;">
-                                                    Ankunft:
-                                                </td>
-                                                <td style="width:50%;">
-                                                    08:00
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td style="width:20%;padding:0px 10px;">
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width:100%;height:50px;padding:0px 10px;" colspan="2">
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width:80%;padding:0px 10px;">
-                            <table style="width:100%;">
-                                <tr>
-                                    <td style="width:10%">
-                                        08.09.2020
-                                    </td>
-                                    <td style="width:20%">
-                                        XQ2879
-                                    </td>
-                                    <td style="width:30%">
-                                        München – Antalya
-                                    </td>
-                                    <td style="width:20%">
-                                        Abflug: 06:00
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%">
-
-                                    </td>
-                                    <td style="width:20%">
-
-                                    </td>
-                                    <td style="width:30%">
-
-                                    </td>
-                                    <td style="width:20%">
-                                        Ankunft: 08:00
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td style="width:20%">
+                                            <table style="width:100%;">
+                                                <tr>
+                                                    <td style="width:50%;">
+                                                        Ankunft:
+                                                    </td>
+                                                    <td style="width:50%;">
+                                                        {{$activy_flight_info['departure_time']}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </table>
                         </td>
                         <td style="width:20%;padding:0px 10px;">
@@ -282,7 +265,7 @@
                             Inkl. Golfgepäckbeförderung. / angemeldet.
                         </td>
                         <td style="width:20%;padding:0px 10px;vertical-align: bottom;">
-                            830,00 EUR
+                            {{$entry->price_flight}},00 EUR
                         </td>
                     </tr>
                     <tr>
@@ -298,76 +281,22 @@
                     <tr>
                         <td style="width:80%;padding:0px 10px;">
                             <table style="width:100%;">
-                                <tr>
-                                    <td style="width:10%;">
-                                        09.09.2020
-                                    </td>
-                                    <td style="width:20%;">
-                                        Sueno Pines Course
-                                    </td>
-                                    <td style="width:10%;">
-                                        10:45
-                                    </td>
-                                    <td style="width:10%;">
-                                        2 Personen
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%;">
-                                        09.09.2020
-                                    </td>
-                                    <td style="width:20%;">
-                                        Sueno Pines Course
-                                    </td>
-                                    <td style="width:10%;">
-                                        10:45
-                                    </td>
-                                    <td style="width:10%;">
-                                        2 Personen
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%;">
-                                        09.09.2020
-                                    </td>
-                                    <td style="width:20%;">
-                                        Sueno Pines Course
-                                    </td>
-                                    <td style="width:10%;">
-                                        10:45
-                                    </td>
-                                    <td style="width:10%;">
-                                        2 Personen
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%;">
-                                        09.09.2020
-                                    </td>
-                                    <td style="width:20%;">
-                                        Sueno Pines Course
-                                    </td>
-                                    <td style="width:10%;">
-                                        10:45
-                                    </td>
-                                    <td style="width:10%;">
-                                        2 Personen
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:10%;">
-                                        09.09.2020
-                                    </td>
-                                    <td style="width:20%;">
-                                        Sueno Pines Course
-                                    </td>
-                                    <td style="width:10%;">
-                                        10:45
-                                    </td>
-                                    <td style="width:10%;">
-                                        2 Personen
-                                    </td>
-                                </tr>
+                                @foreach($entry->activity_program as $activy_plan)
+                                    <tr>
+                                        <td style="width:10%;">
+                                            {{$activy_plan['date']}}
+                                        </td>
+                                        <td style="width:20%;">
+                                            {{$activy_plan['place']}}
+                                        </td>
+                                        <td style="width:10%;">
+                                            {{$activy_plan['time']}}
+                                        </td>
+                                        <td style="width:10%;">
+                                            {{$activy_plan['participant_count']}}
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 <tr>
                                     <td colspan="4">
                                         ** Shuttle Transfer Inklusive **
@@ -439,7 +368,7 @@
 
                         </td>
                         <td style="width:20%; padding:0px 10px;">
-                            <img src="../golf-panel/logo.jpg" alt="#" style="width:200px;height:auto;">
+                            <img src="http://anlshn.com/testforpdf/logo.jpg" alt="#" style="width:200px;height:auto;">
                         </td>
 
 
@@ -465,7 +394,7 @@
                             -----------------
                             <br>
                             &nbsp;
-                            1829,00 EUR
+                            {{$entry->price_total}},00 EUR
                         </td>
                     </tr>
                     <tr>
@@ -475,9 +404,9 @@
                     </tr>
                     <tr>
                         <td style="width:100%;height:50px;padding:0px 10px;font-weight: bold;" colspan="2">
-                            Wir erbitten eine Anzahlung von 458,00 EUR nach Rechnungserhalt.
+                            Wir erbitten eine Anzahlung von {{$depozit = $entry->price_total * 0.25}} EUR nach Rechnungserhalt.
                             <br>
-                            Der Restbetrag von 1371,00 EUR ist bis zum 08.08.2020 fällig.
+                            Der Restbetrag von {{$entry->price_total - $depozit}} EUR ist bis zum {{$entry->payment_due_date}} fällig.
                             <br>
                             Bitte überweisen Sie den Rechnungsbetrag auf das umseitig genannte Konto,
                             <br>
@@ -576,34 +505,13 @@
         </div>
     </div>
 </div>
-<button id="deneme">PDF</button>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<button class="download-button">Download</button>
+
 <script type="text/javascript">
-    $(document).ready(function() {
-
-        //pdf 다운로드
-        $('#deneme').click(function() {
-
-            html2canvas(document.getElementById('section'), {
-                onrendered: function(canvas) {
-
-                    var imgData = canvas.toDataURL('image/png');
-                    console.log('Report Image URL: ' + imgData);
-                    var doc = new jsPDF('p', 'mm', [297, 210]); //210mm wide and 297mm high
-                    var width = doc.internal.pageSize.getWidth();
-                    var height = doc.internal.pageSize.getHeight();
-                    doc.addImage(imgData, 'PNG', 0, 0, width, height);
-                    doc.save('sample.pdf');
-                }
-            });
-
-        });
-
-
-    });
-
+    var elmBtn = document.querySelector('.download-button');
+    elmBtn.addEventListener('click', function(e) {
+        window.print();
+    }, false);
 </script>
 </body>
 

@@ -24,6 +24,9 @@ class Invoice extends Model
     // protected $dates = [];
     protected $casts = [
         'activity_flight_tickets' => 'json',
+        'activity_participants' => 'json',
+        'activity_rooms' => 'json',
+        'activity_program' => 'json',
     ];
     /*
     |--------------------------------------------------------------------------
